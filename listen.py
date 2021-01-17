@@ -16,7 +16,8 @@ class MyHandler(BaseHTTPRequestHandler):
             self.wfile.write(bytes("parameters error!", "utf-8"))
         else:
             try:
-                self.wfile.write(bytes(json.dumps(update(subscribe_list)), "utf-8"))
+                value = update(subscribe_list)
+                self.wfile.write(bytes(json.dumps(value), "utf-8"))
             except:
                 self.wfile.write(bytes("update error!", "utf-8"))
 httpd = socketserver.TCPServer(("", 11459), MyHandler)
