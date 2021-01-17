@@ -9,5 +9,5 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-    environments:
-      - DELAY: 3 #平均延迟时间(秒). 可能降低被微信后台风控的概率
+    environment:
+      DELAY: 3 #平均延迟时间(秒). 可能降低被微信后台风控的概率

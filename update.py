@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import sys, time, json, urllib, os
 from xvfbwrapper import Xvfb
-delay = os.getenv('DELAY')
+delay = int(os.getenv('DELAY'))
 def get_by_css(driver, cssstr, multi=0):
     while 1:
         try:
