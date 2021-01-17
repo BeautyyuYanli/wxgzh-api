@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  wxgzh-api:
+    image: markadams/chromium-xvfb-py3
+    command: sh -c "pip3 install -r requirements.txt && python3 listen.py"
+    restart: always
+    ports:
+      - 11459:11459 # 默认监听端口
+    working_dir: /app
+    volumes:
+      - .:/app
+    environments:
+      - DELAY: 3 #平均延迟时间(秒). 可能降低被微信后台风控的概率
