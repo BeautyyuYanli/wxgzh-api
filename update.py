@@ -33,13 +33,15 @@ def update(subscribe_list):
     driver.get('https://mp.weixin.qq.com/')
     for i in cookies:
         driver.add_cookie(i)
-    
+    time.sleep(delay / 3)
     update_pool = {}
     try:
         # open editor page
         driver.get('https://mp.weixin.qq.com/')
         time.sleep(delay / 3)
         real_url = driver.current_url
+        if real_url.split('qq.com')[1] == '/':
+            raise ValueError('coockies error!')
         token = urllib.parse.parse_qs(real_url)['token'][0]
         editor_url = 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit_v2&action=edit&isNew=1&type=10&createType=10&token=' + token + '&lang=zh_CN'
         driver.get(editor_url)
@@ -70,14 +72,16 @@ def update(subscribe_list):
                 title = title_element.get_attribute('innerHTML')
                 date = date_element.get_attribute('innerHTML')
                 update_pool[entry].append({"title": title, "link": link, "author": entry, "date": date})
-    except:
+    except ValueError as msg:
+        update_pool = str(msg)
+    finally:
         pass
 
     # close driver and cookies
-    cookies = driver.get_cookies()
-    cookies = json.dumps(cookies)
-    with open('cookies.json', 'w') as f:
-        f.write(cookies)
+    # cookies = driver.get_cookies()
+    # cookies = json.dumps(cookies)
+    # with open('cookies.json', 'w') as f:
+    #     f.write(cookies)
     driver.close()
     vdis.stop()
     # print(update_pool)

@@ -17,8 +17,11 @@ class MyHandler(BaseHTTPRequestHandler):
         else:
             try:
                 value = update(subscribe_list)
-                self.wfile.write(bytes(json.dumps(value), "utf-8"))
             except:
                 self.wfile.write(bytes("update error!", "utf-8"))
+            if type(value) == type("faq"):
+                self.wfile.write(bytes(value, "utf-8"))
+            else:
+                self.wfile.write(bytes(json.dumps(value), "utf-8"))
 httpd = socketserver.TCPServer(("", 11459), MyHandler)
 httpd.serve_forever()
