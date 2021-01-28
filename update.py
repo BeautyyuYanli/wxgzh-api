@@ -26,7 +26,7 @@ def update(subscribe_list):
     # load driver and cookies
     vdis = Xvfb()
     vdis.start()
-    driver = webdriver.Chrome()
+    driver = webdriver.Firefox()
     with open('cookies.json', 'r') as f:
         cookies = f.read()
     cookies = json.loads(cookies)

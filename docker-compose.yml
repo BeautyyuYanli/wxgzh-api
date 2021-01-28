@@ -1,9 +1,9 @@
 version: "3"
 services:
   wxgzh-api:
-    image: markadams/chromium-xvfb-py3
+    image: beautyyu/python-selenium:latest
     command: sh -c "pip3 install -r requirements.txt && python3 listen.py"
-    restart: always
+    restart: always # 自启动
     ports:
       - 11459:11459 # 默认监听端口
     working_dir: /app
