@@ -33,7 +33,7 @@ docker-compose up -d
 
 服务默认在`localhost:11459`监听. 你可以发送一个`get`请求, 并携带参数`query=公众号1$公众号2$...$公众号n`, 如:
 ```
-requests.get("http://127.0.0.1:11459?query=大连理工大学&大连理工大学学生会").text
+requests.get("http://127.0.0.1:11459?query=大连理工大学$大连理工大学学生会").text
 ```
 如果服务正常运行, 将返回`json`格式的字符串:
 ```json
