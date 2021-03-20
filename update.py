@@ -26,6 +26,10 @@ def update(subscribe_list):
     # load driver and cookies
     vdis = Xvfb()
     vdis.start()
+    try:
+        os.remove('geckodriver.log')
+    except:
+        pass
     driver = webdriver.Firefox()
     with open('cookies.json', 'r') as f:
         cookies = f.read()
@@ -77,11 +81,6 @@ def update(subscribe_list):
     finally:
         pass
 
-    # close driver and cookies
-    # cookies = driver.get_cookies()
-    # cookies = json.dumps(cookies)
-    # with open('cookies.json', 'w') as f:
-    #     f.write(cookies)
     driver.close()
     vdis.stop()
     # print(update_pool)
