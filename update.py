@@ -24,8 +24,8 @@ def get_by_css(driver, cssstr, multi=0):
 
 def update(subscribe_list):
     # load driver and cookies
-    vdis = Xvfb()
-    vdis.start()
+    # vdis = Xvfb()
+    # vdis.start()
     try:
         os.remove('geckodriver.log')
     except:
@@ -82,7 +82,7 @@ def update(subscribe_list):
         pass
 
     driver.close()
-    vdis.stop()
+    # vdis.stop()
     # print(update_pool)
     return(update_pool)
 
