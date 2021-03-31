@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.firefox.options import Options
 import sys, time, json, urllib, os
 from xvfbwrapper import Xvfb
 delay = int(os.getenv('DELAY'))
@@ -30,7 +31,9 @@ def update(subscribe_list):
         os.remove('geckodriver.log')
     except:
         pass
-    driver = webdriver.Firefox()
+    options = Options()
+#    options.log.level = "trace"
+    driver = webdriver.Firefox(options=options)
     with open('cookies.json', 'r') as f:
         cookies = f.read()
     cookies = json.loads(cookies)
