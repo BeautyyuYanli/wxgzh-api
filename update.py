@@ -32,7 +32,7 @@ def update(subscribe_list):
     except:
         pass
     options = Options()
-#    options.log.level = "trace"
+    options.log.level = "trace"
     driver = webdriver.Firefox(options=options)
     with open('cookies.json', 'r') as f:
         cookies = f.read()
@@ -48,7 +48,7 @@ def update(subscribe_list):
         time.sleep(delay / 3)
         real_url = driver.current_url
         if real_url.split('qq.com')[1] == '/':
-            raise ValueError('coockies error!')
+            raise ValueError('cookies error!')
         token = urllib.parse.parse_qs(real_url)['token'][0]
         editor_url = 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit_v2&action=edit&isNew=1&type=10&createType=10&token=' + token + '&lang=zh_CN'
         driver.get(editor_url)
