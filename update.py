@@ -67,7 +67,13 @@ def update(subscribe_list):
             time.sleep(delay / 3)
             input_box.send_keys(Keys.ENTER)
             time.sleep(delay)
-            gzh_entry = get_by_css(driver, '.link_dialog_panel li:nth-child(1)')
+            for i in range(5):
+                gzh_entry = get_by_css(driver, 'ul.inner_link_account_list > li:nth-child({})'.format(i+1))
+                if get_by_css(
+                    driver, 
+                    'ul.inner_link_account_list > li:nth-child({}) strong'.format(i+1)
+                    ).text == entry:
+                    break
             gzh_entry.click()
             time.sleep(delay * 1.5)
             article_entries = get_by_css(driver, '.inner_link_article_item', 1)
@@ -91,7 +97,6 @@ def update(subscribe_list):
 
 if __name__ == "__main__":
     subscribe_list = [
-        'dut_su',
-        'iduter',
+        '大连理工大学',
     ]
     update(subscribe_list)
