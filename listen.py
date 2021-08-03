@@ -4,10 +4,9 @@ from update import update
 from urllib.parse import unquote
 
 class MyHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
+    def do_POST(self):
         try:
-            subscribe_list = self.path.split('query=')[1]
-            subscribe_list = unquote(subscribe_list)
+            subscribe_list = (self.rfile.read(int(self.headers['content-length']))).decode('utf-8')
             subscribe_list = subscribe_list.split('$')
         except:
             self.send_response(400)
@@ -15,7 +14,6 @@ class MyHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes("parameters error!", "utf-8"))
         else:
-            # value = update(subscribe_list)
             try:
                 value = update(subscribe_list)
             except:
