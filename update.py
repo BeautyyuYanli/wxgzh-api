@@ -10,18 +10,14 @@ import sys, time, json, urllib, os
 from xvfbwrapper import Xvfb
 delay = int(os.getenv('DELAY'))
 def get_by_css(driver, cssstr, multi=0):
-    for i in range(120):
-        try:
-            if multi:
-                element = driver.find_elements_by_css_selector(cssstr)
-            else:
-                element = driver.find_element_by_css_selector(cssstr)
-        except:
-            time.sleep(0.5)
-            continue
+    try:
+        myElem = WebDriverWait(driver, 600).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, cssstr)))
+        if multi == 1:
+            return myElem
         else:
-            return element
-    return 0
+            return myElem[0]
+    except:
+        return 0
 
 def update(subscribe_list):
     # load driver and cookies
@@ -45,7 +41,7 @@ def update(subscribe_list):
     try:
         # open editor page
         driver.get('https://mp.weixin.qq.com/')
-        time.sleep(delay / 3)
+        get_by_css(driver, '#footer.mp-foot')
         real_url = driver.current_url
         if real_url.split('qq.com')[1] == '/':
             raise ValueError('cookies error!')
@@ -53,7 +49,7 @@ def update(subscribe_list):
         editor_url = 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit_v2&action=edit&isNew=1&type=10&createType=10&token=' + token + '&lang=zh_CN'
         driver.get(editor_url)
         time.sleep(delay / 3)
-        driver.find_element_by_css_selector('#js_text_editor_tool_link').click()
+        get_by_css(driver, '#js_text_editor_tool_link').click()
         time.sleep(delay / 2)
 
         # search for articles
@@ -92,7 +88,6 @@ def update(subscribe_list):
 
     driver.close()
     vdis.stop()
-    # print(update_pool)
     return(update_pool)
 
 if __name__ == "__main__":
