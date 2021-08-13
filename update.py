@@ -48,21 +48,16 @@ def update(subscribe_list):
         token = urllib.parse.parse_qs(real_url)['token'][0]
         editor_url = 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit_v2&action=edit&isNew=1&type=10&createType=10&token=' + token + '&lang=zh_CN'
         driver.get(editor_url)
-        time.sleep(delay / 3)
         get_by_css(driver, '#js_text_editor_tool_link').click()
-        time.sleep(delay / 2)
 
         # search for articles
         for entry in subscribe_list:
             update_pool[entry] = []
             othergzh_button = get_by_css(driver, '.weui-desktop-btn.weui-desktop-btn_default')
             othergzh_button.click()
-            time.sleep(delay / 2)
             input_box = get_by_css(driver, '.link_dialog_panel .weui-desktop-form__input:nth-child(2)')
             input_box.send_keys(entry)
-            time.sleep(delay / 3)
             input_box.send_keys(Keys.ENTER)
-            time.sleep(delay)
             for i in range(5):
                 gzh_entry = get_by_css(driver, 'ul.inner_link_account_list > li:nth-child({})'.format(i+1))
                 if get_by_css(
@@ -71,7 +66,6 @@ def update(subscribe_list):
                     ).text == entry:
                     break
             gzh_entry.click()
-            time.sleep(delay * 1.5)
             article_entries = get_by_css(driver, '.inner_link_article_item', 1)
             for article_entry in article_entries:
                 link_element = get_by_css(article_entry, 'span:nth-child(3) > a')
