@@ -1,9 +1,27 @@
 import socketserver, json
 from http.server import BaseHTTPRequestHandler
+from urllib import parse
 from update import update
-from urllib.parse import unquote
+from publish import publish
+import urllib
 
 class MyHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        try:
+            parseRes = urllib.parse.urlparse(self.path)
+            if parseRes.path == '/publish':
+                if publish() != 0:
+                    raise Exception('publish error!')
+        except:
+            self.send_response(500)
+            self.send_header("Content-Type", "text/html; charset=UTF-8")
+            self.end_headers()
+            self.wfile.write(bytes("internal error!", "utf-8"))
+        else:
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=UTF-8")
+            self.end_headers()
+            self.wfile.write(bytes('done', "utf-8"))
     def do_POST(self):
         try:
             subscribe_list = (self.rfile.read(int(self.headers['content-length']))).decode('utf-8')
