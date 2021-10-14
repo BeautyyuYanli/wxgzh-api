@@ -55,7 +55,7 @@ def update(subscribe_list):
             update_pool[entry] = []
             othergzh_button = get_by_css(driver, '.weui-desktop-btn.weui-desktop-btn_default')
             othergzh_button.click()
-            input_box = get_by_css(driver, '.link_dialog_panel .weui-desktop-form__input:nth-child(2)')
+            input_box = get_by_css(driver, '.weui-desktop-form__input_append-in > input')
             input_box.send_keys(entry)
             input_box.send_keys(Keys.ENTER)
             for i in range(5):
