@@ -11,7 +11,7 @@ from xvfbwrapper import Xvfb
 delay = int(os.getenv('DELAY'))
 def get_by_css(driver, cssstr, multi=0):
     try:
-        myElem = WebDriverWait(driver, 600).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, cssstr)))
+        myElem = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, cssstr)))
         if multi == 1:
             return myElem
         else:
@@ -54,17 +54,25 @@ def update(subscribe_list):
         for entry in subscribe_list:
             update_pool[entry] = []
             othergzh_button = get_by_css(driver, '.weui-desktop-btn.weui-desktop-btn_default')
-            othergzh_button.click()
+            if othergzh_button != 0:
+                othergzh_button.click()
             input_box = get_by_css(driver, '.weui-desktop-form__input_append-in > input')
             input_box.send_keys(entry)
             input_box.send_keys(Keys.ENTER)
+            flag = 0
             for i in range(5):
                 gzh_entry = get_by_css(driver, 'ul.inner_link_account_list > li:nth-child({})'.format(i+1))
+                if gzh_entry == 0:
+                    break
                 if get_by_css(
                     driver, 
                     'ul.inner_link_account_list > li:nth-child({}) strong'.format(i+1)
                     ).text == entry:
+                    flag = 1
                     break
+            if flag == 0:
+                update_pool[entry].append({"title": "no gzh found", "link": "http://example.com", "author": entry, "date": "1970-01-01"})
+                continue
             gzh_entry.click()
             article_entries = get_by_css(driver, '.inner_link_article_item', 1)
             for article_entry in article_entries:
