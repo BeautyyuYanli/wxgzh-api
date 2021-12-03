@@ -44,17 +44,21 @@ def publish(appid=0):
     # get_by_css(driver, 'li.weui-desktop-menu__item:nth-child(2) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1)').click()
     real_url = driver.current_url
     token = urllib.parse.parse_qs(real_url)['token'][0]
-    url = 'https://mp.weixin.qq.com/cgi-bin/appmsg?begin=0&count=10&type=10&action=list_card&token={}&lang=zh_CN'.format(token)
+    url = 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit_v2&action=edit&isNew=1&type=10&createType=100&token={}&lang=zh_CN'.format(token)
     driver.get(url)
-    cards = get_by_css(driver, 'tbody > tr > td > div:nth-child(1) > div:nth-child(4) > a:nth-child(1)', 1)
-    # cards = get_by_css(driver, '.weui-desktop-card.weui-desktop-appmsg', 1)
-    LatestAppid = cards[0].get_attribute('href')
-    LatestAppid = urllib.parse.parse_qs(LatestAppid)['appmsgid'][0]
+    get_by_css(driver, 'div.tab:nth-child(3)').click()
+    time.sleep(delay)
+    get_by_css(driver, 'div.weui-desktop-media__list-col:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)').click()
+    time.sleep(delay)
+    get_by_css(driver, 'div.weui-desktop-btn_wrp:nth-child(1)').click()
+    time.sleep(delay)
+    # LatestAppid = cards[0].get_attribute('href')
+    # LatestAppid = urllib.parse.parse_qs(LatestAppid)['appmsgid'][0]
     # LatestAppid = cards[0].get_attribute('data-appid')
-    if appid == 0:
-        appid = LatestAppid
-    url = 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=10&appmsgid={}&token={}&lang=zh_CN&fromview=list'.format(appid, token)
-    driver.get(url)
+    # if appid == 0:
+    #     appid = LatestAppid
+    # url = 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=10&appmsgid={}&token={}&lang=zh_CN&fromview=list'.format(appid, token)
+    # driver.get(url)
     get_by_css(driver, '#js_send', button=1).click()
     get_by_css(driver, '.mass-send__footer .weui-desktop-btn_primary').click()
     al = get_by_css(driver, '#vue_app > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > button', button=1)
