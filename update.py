@@ -71,8 +71,9 @@ def update(subscribe_list):
                     flag = 1
                     break
             if flag == 0:
-                update_pool[entry].append({"title": "no gzh found", "link": "http://example.com", "author": entry, "date": "1970-01-01"})
-                continue
+                gzh_entry = get_by_css(driver, 'ul.inner_link_account_list > li:nth-child(1)')
+                print('no match for {}, instead of:'.format(entry))
+                print(get_by_css(driver, 'ul.inner_link_account_list > li:nth-child(1) strong').text)
             gzh_entry.click()
             article_entries = get_by_css(driver, '.inner_link_article_item', 1)
             for article_entry in article_entries:
@@ -94,6 +95,6 @@ def update(subscribe_list):
 
 if __name__ == "__main__":
     subscribe_list = [
-        '大连理工大学',
+        'DUT建工青年',
     ]
-    update(subscribe_list)
+    print(update(subscribe_list))

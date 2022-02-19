@@ -41,35 +41,23 @@ def publish(appid=0):
         driver.add_cookie(i)
     time.sleep(delay / 3)
     driver.get('https://mp.weixin.qq.com/')
-    # get_by_css(driver, 'li.weui-desktop-menu__item:nth-child(2) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1)').click()
     real_url = driver.current_url
     token = urllib.parse.parse_qs(real_url)['token'][0]
-    url = 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit_v2&action=edit&isNew=1&type=10&createType=100&token={}&lang=zh_CN'.format(token)
-    driver.get(url)
-    get_by_css(driver, 'div.tab:nth-child(3)').click()
-    time.sleep(delay)
-    get_by_css(driver, 'div.weui-desktop-media__list-col:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)').click()
-    time.sleep(delay)
-    get_by_css(driver, 'div.weui-desktop-btn_wrp:nth-child(1)').click()
-    time.sleep(delay)
-    # LatestAppid = cards[0].get_attribute('href')
-    # LatestAppid = urllib.parse.parse_qs(LatestAppid)['appmsgid'][0]
-    # LatestAppid = cards[0].get_attribute('data-appid')
-    # if appid == 0:
-    #     appid = LatestAppid
-    # url = 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=10&appmsgid={}&token={}&lang=zh_CN&fromview=list'.format(appid, token)
-    # driver.get(url)
-    get_by_css(driver, '#js_send', button=1).click()
-    get_by_css(driver, '.mass-send__footer .weui-desktop-btn_primary').click()
-    al = get_by_css(driver, '#vue_app > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > button', button=1)
-
-    if al == 0:
-        # print('error when publishing')
-        return -1
-    else:
+    # check list and get appid
+    driver.get('https://mp.weixin.qq.com/cgi-bin/appmsg?begin=0&count=10&type=77&action=list_card&token={}&lang=zh_CN'.format(token))
+    appid = get_by_css(driver, 'div.publish_card_container:nth-child(2) > div:nth-child(1)').get_attribute('data-appid')
+    # publish
+    try:
+        driver.get('https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid={}&isMul=1&replaceScene=0&isSend=1&isFreePublish=0&token={}&lang=zh_CN'.format(appid, token))
+        get_by_css(driver, '.mass-send__footer .weui-desktop-btn_primary', button=1).click()
+        al = get_by_css(driver, '#vue_app > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > button', button=1)
+        print(al)
         al.click()
         time.sleep(delay * 3)
-        # print('done')
+    except:
+        print('error when publishing')
+        return -1
+
     driver.close()
     vdis.stop()
     return 0
