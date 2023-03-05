@@ -1,0 +1,2 @@
+class CookieException(Exception):
+    pass
